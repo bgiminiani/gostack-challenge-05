@@ -1,5 +1,11 @@
 import Transaction from '../models/Transaction';
 
+interface CreateTransactionDTO {
+  title: string;
+  value: number;
+  type: 'income' | 'outcome';
+}
+
 interface Balance {
   income: number;
   outcome: number;
@@ -28,13 +34,13 @@ class TransactionsRepository {
     return balance;
   }
 
-  public create(title: string, value: number, type: any): Transaction {
+  public create({ title, value, type }: CreateTransactionDTO): Transaction {
     const transaction = new Transaction({ title, value, type });
 
     const balance = this.getBalance();
 
     if (type === 'outcome' && value - balance.total > 0) {
-      throw new Error('there is no money enough to outcome');
+      throw new Error('There is no money enough to outcome');
     }
 
     this.transactions.push(transaction);
