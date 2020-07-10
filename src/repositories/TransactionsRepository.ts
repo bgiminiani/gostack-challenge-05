@@ -14,15 +14,32 @@ class TransactionsRepository {
   }
 
   public all(): Transaction[] {
-    // TODO
+    return this.transactions;
   }
 
   public getBalance(): Balance {
-    // TODO
+    const balance = this.transactions.reduce((inOut: any, actual) => {
+      inOut[actual.type] = actual.value + inOut[actual.type] || actual.value;
+      return inOut;
+    }, {});
+
+    balance.total = balance.income - balance.outcome;
+
+    return balance;
   }
 
-  public create(): Transaction {
-    // TODO
+  public create(title: string, value: number, type: any): Transaction {
+    const transaction = new Transaction({ title, value, type });
+
+    const balance = this.getBalance();
+
+    if (type === 'outcome' && value - balance.total > 0) {
+      throw new Error('there is no money enough to outcome');
+    }
+
+    this.transactions.push(transaction);
+
+    return transaction;
   }
 }
 
