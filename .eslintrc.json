@@ -22,6 +22,7 @@
   "plugins": ["@typescript-eslint", "prettier"],
   "rules": {
     "prettier/prettier": "error",
+    "no-param-reassign": "off",
     "import/extensions": [
       "error",
       "ignorePackages",
